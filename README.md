@@ -2,15 +2,17 @@
 
 Lightweight **LLM Wiki + qmd** template for project knowledge bases.
 
-## Layout
+## What this gives you
 
 ```text
 AGENTS.md          # agent policy and retrieval flow
 raw/               # source of truth
 wiki/              # LLM-written synthesis
 .qmd/              # qmd local index/cache
-.agents/skills/    # project-local skills
+.agents/skills/    # project-local agent skills
 ```
+
+Rule: **raw is truth, wiki is synthesis, no source = no fact.**
 
 ## Install
 
@@ -19,7 +21,9 @@ npm install -g @tobilu/qmd
 qmd doctor
 ```
 
-## Bootstrap
+## Adopt in a new project
+
+After cloning `wiki-lite`, run this from your target project:
 
 ```bash
 cd MyProject
@@ -34,11 +38,33 @@ qmd update
 qmd embed
 ```
 
-## Query
+Put source documents in:
 
 ```text
-question → wiki/ → raw/ → resources → not found
+raw/references/
+raw/detection-rules/
+raw/resources/
+raw/exports/
 ```
+
+## Agent usage
+
+Tell the agent:
+
+```text
+Read AGENTS.md and .agents/skills/llm-wiki/SKILL.md.
+Use wiki first, fallback raw, cite sources.
+```
+
+Agent flow:
+
+```text
+question → read AGENTS.md → read llm-wiki skill → search wiki/ → search raw/ → answer with citations → update wiki if reusable
+```
+
+If evidence is missing, the agent must say `not found` and list searched sources.
+
+## Query commands
 
 ```bash
 qmd search "exact terms" -n 5
@@ -47,7 +73,7 @@ qmd query "hybrid question" -n 5
 qmd get "path:start:count"
 ```
 
-## Ingest
+## Ingest flow
 
 1. Pick one target wiki page/topic.
 2. Search raw/wiki with qmd or `rg`.
@@ -61,4 +87,26 @@ Windows fallback if `rg` is unavailable:
 
 ```powershell
 Select-String -Path .\raw\**\*.md,.\wiki\**\*.md -Pattern "keyword"
+```
+
+## Git policy
+
+Commit:
+
+```text
+AGENTS.md
+wiki/**/*.md
+.qmd/index.yml
+raw/**/.gitkeep
+.agents/skills/**/SKILL.md
+```
+
+Do not commit:
+
+```text
+.qmd/index.sqlite
+.qmd/*.sqlite
+.qmd/cache/
+private raw sources
+client secrets
 ```
