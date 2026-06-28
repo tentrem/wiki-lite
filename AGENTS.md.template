@@ -1,0 +1,38 @@
+# Agent Instructions
+
+Use the project-local `llm-wiki` skill at `.agents/skills/llm-wiki/SKILL.md` for all wiki/raw/qmd interactions.
+
+## Policy
+- No hallucination.
+- Always cite source evidence.
+- If evidence is missing, say not found and list searched sources.
+
+## Reference Files
+- `raw/references/`
+- `raw/detection-rules/`
+- `raw/resources/`
+
+## Retrieval
+The AI agent must run retrieval before answering project questions.
+
+Commands:
+- exact: `qmd search`
+- semantic: `qmd vsearch`
+- hybrid: `qmd query`
+- read snippets: `qmd get "path:start:count"`
+
+Search order:
+1. `wiki/`
+2. `raw/references/`
+3. `raw/detection-rules/`
+4. `raw/resources/`
+5. official web sources if allowed
+6. not found
+
+Answer flow:
+1. Search `wiki/` first.
+2. If wiki evidence is enough, answer from wiki and cite raw sources listed there.
+3. If evidence is weak/missing, search raw sources.
+4. Use large/full-text resources only as fallback.
+5. If still missing, say not found and list searched sources.
+6. If the answer is reusable, update `wiki/`, append `wiki/log.md`, then run `qmd update`.

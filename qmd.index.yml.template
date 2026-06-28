@@ -1,0 +1,18 @@
+collections:
+  PROJECT_NAME:
+    path: /absolute/path/to/PROJECT
+    pattern: "**/*.md"
+    ignore:
+      - ".qmd/**"
+      - ".git/**"
+      - ".vscode/**"
+      - ".agent/**"
+      - ".agents/**"
+      - "scripts/**"
+    context:
+      "": PROJECT knowledge base
+      wiki: LLM-maintained synthesis wiki
+      raw/references: Raw reference files
+      raw/detection-rules: Raw examples/rules
+      raw/resources: Raw resources and full text
+      raw/exports: Raw import/export files

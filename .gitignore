@@ -1,0 +1,4 @@
+.qmd/index.sqlite
+.qmd/*.sqlite
+.qmd/cache/
+.DS_Store
